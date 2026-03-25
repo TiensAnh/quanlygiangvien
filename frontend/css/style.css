@@ -158,25 +158,11 @@ button.danger {
 
 .topbar {
   display: flex;
-  justify-content: space-between;
+  justify-content: flex-start;
   gap: 16px;
   align-items: center;
   margin-bottom: 20px;
   flex-wrap: wrap;
-}
-
-.api-setting {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  background: #fff;
-  padding: 10px;
-  border-radius: 12px;
-  border: 1px solid var(--border);
-}
-
-.api-setting input {
-  width: 260px;
 }
 
 .view {
@@ -447,14 +433,6 @@ overflow-y: auto;
 
   .form-row-2 {
     grid-template-columns: 1fr;
-  }
-
-  .api-setting {
-    width: 100%;
-  }
-
-  .api-setting input {
-    width: 100%;
   }
 }
 

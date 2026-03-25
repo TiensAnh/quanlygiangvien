@@ -1,7 +1,9 @@
 const $ = (selector) => document.querySelector(selector);
 
+const DEFAULT_API_BASE = "http://localhost:3000/api";
+
 const state = {
-  apiBase: localStorage.getItem("apiBase") || "http://localhost:3000/api",
+  apiBase: DEFAULT_API_BASE,
   token: localStorage.getItem("token") || "",
   user: JSON.parse(localStorage.getItem("user") || "null"),
   currentView: "dashboard"
@@ -775,6 +777,9 @@ async function openAccountModal(item = null) {
   if (!canAdmin()) return;
 
   try {
+    const selectedStatus = item ? Boolean(item.status) : true;
+    const isProtectedAdmin = item?.role === "admin";
+
     openModal(
       item ? "Sửa tài khoản" : "Thêm tài khoản",
       `
@@ -824,18 +829,46 @@ async function openAccountModal(item = null) {
       `
     );
 
+    const accountStatusSelect = document.querySelector('#accountForm select[name="status"]');
+    if (accountStatusSelect) {
+      accountStatusSelect.value = selectedStatus ? "1" : "0";
+
+      if (isProtectedAdmin) {
+        accountStatusSelect.value = "1";
+        accountStatusSelect.disabled = true;
+
+        const hint = document.createElement("small");
+        hint.className = "hint";
+        hint.textContent = "Tai khoan admin luon duoc giu o trang thai kich hoat.";
+        accountStatusSelect.insertAdjacentElement("afterend", hint);
+      }
+    }
+
+    const accountRoleSelect = document.querySelector('#accountForm select[name="role"]');
+    if (accountRoleSelect && isProtectedAdmin) {
+      accountRoleSelect.value = "admin";
+      accountRoleSelect.disabled = true;
+
+      const hint = document.createElement("small");
+      hint.className = "hint";
+      hint.textContent = "Tai khoan admin khong the doi thanh giang vien.";
+      accountRoleSelect.insertAdjacentElement("afterend", hint);
+    }
+
     document.getElementById("accountForm").onsubmit = async (e) => {
       e.preventDefault();
 
       const formData = Object.fromEntries(new FormData(e.target).entries());
+      const resolvedRole = isProtectedAdmin ? "admin" : formData.role;
+      const resolvedStatus = isProtectedAdmin ? true : formData.status === "1";
       
       try {
         if (item?.username) {
           await api(`/accounts/${item.username}`, {
             method: "PUT",
             body: JSON.stringify({
-              role: formData.role,
-              status: formData.status === "1",
+              role: resolvedRole,
+              status: resolvedStatus,
               password: formData.password || undefined
             })
           });
@@ -846,8 +879,8 @@ async function openAccountModal(item = null) {
             body: JSON.stringify({
               username: formData.username,
               password: formData.password,
-              role: formData.role,
-              status: formData.status === "1"
+              role: resolvedRole,
+              status: resolvedStatus
             })
           });
           showToast("Thêm tài khoản thành công", "success");
@@ -1478,11 +1511,17 @@ async function handleRegister(e) {
   e.preventDefault();
 
   const formData = Object.fromEntries(new FormData(e.target).entries());
+  const { confirmPassword, ...payload } = formData;
+
+  if (payload.password !== confirmPassword) {
+    showToast("Mật khẩu nhập lại không khớp");
+    return;
+  }
 
   try {
     await api("/auth/register", {
       method: "POST",
-      body: JSON.stringify(formData)
+      body: JSON.stringify(payload)
     });
 
     showToast("Đăng ký thành công", "success");
@@ -1514,15 +1553,6 @@ function bindMenuEvents() {
 }
 
 function bindEvents() {
-  const apiBaseInput = $("#apiBaseInput");
-  if (apiBaseInput) apiBaseInput.value = state.apiBase;
-
-  $("#saveApiBase")?.addEventListener("click", () => {
-    state.apiBase = $("#apiBaseInput")?.value.trim() || "http://localhost:3000/api";
-    localStorage.setItem("apiBase", state.apiBase);
-    showToast("Đã lưu API URL", "success");
-  });
-
   $("#loginForm")?.addEventListener("submit", handleLogin);
   $("#registerForm")?.addEventListener("submit", handleRegister);
 

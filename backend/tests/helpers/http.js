@@ -1,0 +1,22 @@
+function createMockReq(overrides = {}) {
+  return {
+    body: {},
+    params: {},
+    query: {},
+    headers: {},
+    user: null,
+    ...overrides
+  };
+}
+
+function createMockRes() {
+  const res = {};
+  res.status = jest.fn().mockReturnValue(res);
+  res.json = jest.fn().mockReturnValue(res);
+  return res;
+}
+
+module.exports = {
+  createMockReq,
+  createMockRes
+};

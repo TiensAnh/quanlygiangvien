@@ -31,10 +31,7 @@
         <form id="registerForm" class="form-grid">
           <input type="text" name="username" placeholder="Tên tài khoản mới" required />
           <input type="password" name="password" placeholder="Mật khẩu" required />
-          <select name="role">
-            <option value="giangvien">Giảng viên</option>
-            <option value="admin">Admin</option>
-          </select>
+          <input type="password" name="confirmPassword" placeholder="Nhập lại mật khẩu" required />
           <button type="submit" class="primary">Đăng ký</button>
         </form>
       </div>
@@ -63,11 +60,6 @@
     <main class="content">
       <header class="topbar">
         <h1 id="viewTitle">Dashboard</h1>
-        <div class="api-setting">
-          <label>API URL</label>
-          <input id="apiBaseInput" value="http://localhost:3000/api" />
-          <button id="saveApiBase">Lưu</button>
-        </div>
       </header>
 
       <section id="dashboardView" class="view active"></section>

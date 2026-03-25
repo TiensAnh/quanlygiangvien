@@ -63,8 +63,20 @@ exports.update = async (req, res) => {
   try {
     const { role, status, password } = req.body;
     const username = req.params.id;
-    const [exists] = await db.query("SELECT username FROM accounts WHERE username = ?", [username]);
+    const [exists] = await db.query("SELECT username, role, status FROM accounts WHERE username = ?", [username]);
     if (!exists.length) return fail(res, "Không tìm thấy tài khoản", 404);
+
+    const currentAccount = exists[0];
+    const wantsDisable = status === false || status === 0 || status === "0";
+    const wantsDemoteAdmin = currentAccount.role === "admin" && role !== undefined && role !== "admin";
+
+    if (currentAccount.role === "admin" && wantsDisable) {
+      return fail(res, "Không thể vô hiệu hóa tài khoản admin", 403);
+    }
+
+    if (wantsDemoteAdmin) {
+      return fail(res, "Không thể chuyển tài khoản admin thành giảng viên", 403);
+    }
 
     if (password) {
       const hashed = await bcrypt.hash(password, 10);
@@ -74,7 +86,8 @@ exports.update = async (req, res) => {
       await db.query("UPDATE accounts SET role = ? WHERE username = ?", [role === "admin" ? "admin" : "giangvien", username]);
     }
     if (status !== undefined) {
-      await db.query("UPDATE accounts SET status = ? WHERE username = ?", [status ? 1 : 0, username]);
+      const normalizedStatus = status === true || status === 1 || status === "1" ? 1 : 0;
+      await db.query("UPDATE accounts SET status = ? WHERE username = ?", [normalizedStatus, username]);
     }
 
     const [rows] = await db.query("SELECT username, role, status FROM accounts WHERE username = ?", [username]);

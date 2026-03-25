@@ -6,7 +6,7 @@ const { validateRequired } = require("../utils/validators");
 
 exports.register = async (req, res) => {
   try {
-    const { username, password, role = "giangvien" } = req.body;
+    const { username, password } = req.body;
 
     const errors = validateRequired(
       { username, password },
@@ -20,10 +20,10 @@ exports.register = async (req, res) => {
     const hashed = await bcrypt.hash(password, 10);
     await db.query(
       "INSERT INTO accounts (username, password, role, status) VALUES (?, ?, ?, 1)",
-      [username, hashed, role === "admin" ? "admin" : "giangvien"]
+      [username, hashed, "giangvien"]
     );
 
-    return ok(res, { username, role }, "Đăng ký thành công", 201);
+    return ok(res, { username, role: "giangvien" }, "Đăng ký thành công", 201);
   } catch (error) {
     return fail(res, error.message, 500);
   }
@@ -60,15 +60,19 @@ exports.login = async (req, res) => {
       { expiresIn: "8h" }
     );
 
-    return ok(res, {
-      token,
-      user: {
-        username: user.username,
-        role: user.role,
-        magv: user.magv || null,
-        tengv: user.tengv || null
-      }
-    }, "Đăng nhập thành công");
+    return ok(
+      res,
+      {
+        token,
+        user: {
+          username: user.username,
+          role: user.role,
+          magv: user.magv || null,
+          tengv: user.tengv || null
+        }
+      },
+      "Đăng nhập thành công"
+    );
   } catch (error) {
     return fail(res, error.message, 500);
   }
