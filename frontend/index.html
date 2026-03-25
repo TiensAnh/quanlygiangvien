@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Phần mềm quản lý giảng viên</title>
+  <link rel="stylesheet" href="./css/style.css" />
+</head>
+<body>
+  <div id="toast"></div>
+
+  <section id="authSection" class="auth-layout">
+    <div class="auth-card">
+      <h1>Phần mềm quản lý giảng viên</h1>
+      <p class="muted">Đăng nhập hoặc đăng ký để sử dụng hệ thống</p>
+
+      <div class="tabs">
+        <button class="tab active" data-tab="loginTab">Đăng nhập</button>
+        <button class="tab" data-tab="registerTab">Đăng ký</button>
+      </div>
+
+      <div id="loginTab" class="tab-content active">
+        <form id="loginForm" class="form-grid">
+          <input type="text" name="username" placeholder="Tên tài khoản" required />
+          <input type="password" name="password" placeholder="Mật khẩu" required />
+          <button type="submit" class="primary">Đăng nhập</button>
+        </form>
+      </div>
+
+      <div id="registerTab" class="tab-content">
+        <form id="registerForm" class="form-grid">
+          <input type="text" name="username" placeholder="Tên tài khoản mới" required />
+          <input type="password" name="password" placeholder="Mật khẩu" required />
+          <select name="role">
+            <option value="giangvien">Giảng viên</option>
+            <option value="admin">Admin</option>
+          </select>
+          <button type="submit" class="primary">Đăng ký</button>
+        </form>
+      </div>
+    </div>
+  </section>
+
+  <section id="appSection" class="app-layout hidden">
+    <aside class="sidebar">
+      <div>
+        <h2>QLGV</h2>
+        <p id="currentUser" class="muted"></p>
+      </div>
+      <nav class="menu">
+        <button data-view="dashboard" class="menu-item active">Dashboard</button>
+        <button data-view="accounts" class="menu-item admin-only">Tài khoản</button>
+        <button data-view="teachers" class="menu-item">Giảng viên</button>
+        <button data-view="subjects" class="menu-item">Môn học</button>
+        <button data-view="semesters" class="menu-item">Học kỳ</button>
+        <button data-view="assignments" class="menu-item">Phân công</button>
+        <button data-view="search" class="menu-item">Tra cứu</button>
+        <button data-view="reports" class="menu-item">Thống kê</button>
+      </nav>
+      <button id="logoutBtn" class="danger">Đăng xuất</button>
+    </aside>
+
+    <main class="content">
+      <header class="topbar">
+        <h1 id="viewTitle">Dashboard</h1>
+        <div class="api-setting">
+          <label>API URL</label>
+          <input id="apiBaseInput" value="http://localhost:3000/api" />
+          <button id="saveApiBase">Lưu</button>
+        </div>
+      </header>
+
+      <section id="dashboardView" class="view active"></section>
+
+      <section id="accountsView" class="view">
+        <div class="toolbar">
+          <input id="accountKeyword" placeholder="Tìm tên tài khoản..." />
+          <button id="reloadAccounts">Lọc</button>
+          <button id="openAccountModal" class="primary admin-only">Thêm tài khoản</button>
+        </div>
+        <div id="accountsTable"></div>
+      </section>
+
+      <section id="teachersView" class="view">
+        <div class="toolbar">
+          <input id="teacherKeyword" placeholder="Tìm tên/mã/quê quán..." />
+          <button id="reloadTeachers">Lọc</button>
+          <button id="openTeacherModal" class="primary admin-only">Thêm giảng viên</button>
+        </div>
+        <div id="teachersTable"></div>
+      </section>
+
+      <section id="subjectsView" class="view">
+        <div class="toolbar">
+          <input id="subjectKeyword" placeholder="Tìm môn học..." />
+          <button id="reloadSubjects">Lọc</button>
+          <button id="openSubjectModal" class="primary admin-only">Thêm môn học</button>
+        </div>
+        <div id="subjectsTable"></div>
+      </section>
+
+      <section id="semestersView" class="view">
+        <div class="toolbar">
+          <input id="semesterKeyword" placeholder="Tìm học kỳ..." />
+          <button id="reloadSemesters">Lọc</button>
+          <button id="openSemesterModal" class="primary admin-only">Thêm học kỳ</button>
+        </div>
+        <div id="semestersTable"></div>
+      </section>
+
+      <section id="assignmentsView" class="view">
+        <div class="toolbar">
+          <input id="assignmentSearch" placeholder="Tìm giảng viên, môn, học kỳ..." />
+          <button onclick="loadAssignments()">Lọc</button>
+          <button id="openAssignmentModal" class="primary admin-only">Thêm phân công</button>
+        </div>
+        <div id="assignmentsTable"></div>
+      </section>
+
+      <section id="searchView" class="view">
+        <div class="toolbar">
+          <input id="globalKeyword" placeholder="Nhập từ khóa tra cứu..." />
+          <button id="runSearch" class="primary">Tra cứu</button>
+        </div>
+        <div id="searchResults"></div>
+      </section>
+
+      <section id="reportsView" class="view">
+        <div class="toolbar">
+          <select id="reportSemesterFilter">
+            <option value="">Tất cả học kỳ</option>
+          </select>
+          <button id="reloadReports">Tải báo cáo</button>
+        </div>
+        <div id="overviewCards" class="cards"></div>
+        <div id="reportsTeacherTable"></div>
+        <div id="reportsSemesterTable"></div>
+      </section>
+    </main>
+  </section>
+
+  <div id="modalRoot"></div>
+
+  <script src="./js/app.js"></script>
+</body>
+</html>

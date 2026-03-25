@@ -1,0 +1,195 @@
+{
+  "info": {
+    "name": "QLGV API",
+    "_postman_id": "2b0ec727-8f21-4c8c-a4f7-qlgv-demo",
+    "description": "Bộ API mẫu cho phần mềm quản lý giảng viên",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "Auth - Register",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\"username\": \"gvnew\", \"password\": \"123456\", \"role\": \"giangvien\"}"
+        },
+        "url": {
+          "raw": "{{baseUrl}}/auth/register",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "auth",
+            "register"
+          ]
+        }
+      }
+    },
+    {
+      "name": "Auth - Login",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\"username\": \"admin1\", \"password\": \"123456\"}"
+        },
+        "url": {
+          "raw": "{{baseUrl}}/auth/login",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "auth",
+            "login"
+          ]
+        }
+      }
+    },
+    {
+      "name": "Accounts - Get All",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{token}}"
+          }
+        ],
+        "url": {
+          "raw": "{{baseUrl}}/accounts",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "accounts"
+          ]
+        }
+      }
+    },
+    {
+      "name": "Teachers - Search",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{token}}"
+          }
+        ],
+        "url": {
+          "raw": "{{baseUrl}}/teachers/search?tengv=Nguyễn",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "teachers",
+            "search"
+          ],
+          "query": [
+            {
+              "key": "tengv",
+              "value": "Nguyễn"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "name": "Subjects - Create",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{token}}"
+          },
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\"mamon\": \"MH999\", \"tenmon\": \"Môn học demo\", \"sotiet\": 15, \"sotinchi\": 2}"
+        },
+        "url": {
+          "raw": "{{baseUrl}}/subjects",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "subjects"
+          ]
+        }
+      }
+    },
+    {
+      "name": "Assignments - Report Load",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{token}}"
+          }
+        ],
+        "url": {
+          "raw": "{{baseUrl}}/assignments/report/load",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "assignments",
+            "report",
+            "load"
+          ]
+        }
+      }
+    },
+    {
+      "name": "Reports - Overview",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{token}}"
+          }
+        ],
+        "url": {
+          "raw": "{{baseUrl}}/reports/overview",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "reports",
+            "overview"
+          ]
+        }
+      }
+    }
+  ],
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "http://localhost:3000/api"
+    },
+    {
+      "key": "token",
+      "value": ""
+    }
+  ]
+}
