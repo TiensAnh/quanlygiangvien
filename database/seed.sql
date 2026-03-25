@@ -2,11 +2,12 @@ USE quanlygiangvien;
 
 -- Password mẫu cho tất cả tài khoản: 123456
 INSERT INTO accounts (username, password, role, status) VALUES
-('admin1', '$2a$10$N9qo8uLOickgx2ZMRZoMyeIjZAgcfl7h8A9kaI0s5momkGLumZ5qW', 'admin', 1),
-('gv001', '$2a$10$N9qo8uLOickgx2ZMRZoMyeIjZAgcfl7h8A9kaI0s5momkGLumZ5qW', 'giangvien', 1),
-('gv002', '$2a$10$N9qo8uLOickgx2ZMRZoMyeIjZAgcfl7h8A9kaI0s5momkGLumZ5qW', 'giangvien', 1),
-('gv003', '$2a$10$N9qo8uLOickgx2ZMRZoMyeIjZAgcfl7h8A9kaI0s5momkGLumZ5qW', 'giangvien', 1),
-('gv004', '$2a$10$N9qo8uLOickgx2ZMRZoMyeIjZAgcfl7h8A9kaI0s5momkGLumZ5qW', 'giangvien', 1);
+('admin1', '$2a$10$ace/v1inFKT8tUy6/0zCD.AmWrJv69uVtmMQa/9IHukU7ttyyGKlS', 'admin', 1),
+('gv001', '$2a$10$ace/v1inFKT8tUy6/0zCD.AmWrJv69uVtmMQa/9IHukU7ttyyGKlS', 'giangvien', 1),
+('gv002', '$2a$10$ace/v1inFKT8tUy6/0zCD.AmWrJv69uVtmMQa/9IHukU7ttyyGKlS', 'giangvien', 1),
+('gv003', '$2a$10$ace/v1inFKT8tUy6/0zCD.AmWrJv69uVtmMQa/9IHukU7ttyyGKlS', 'giangvien', 1),
+('gv004', '$2a$10$ace/v1inFKT8tUy6/0zCD.AmWrJv69uVtmMQa/9IHukU7ttyyGKlS', 'giangvien', 1),
+('admin2', '$2a$10$ace/v1inFKT8tUy6/0zCD.AmWrJv69uVtmMQa/9IHukU7ttyyGKlS', 'admin', 1);
 
 INSERT INTO teachers (magv, tengv, username, quequan, ngaysinh, gioitinh, sodienthoai) VALUES
 ('GV001', 'Nguyễn Văn An', 'gv001', 'Hà Nội', '1988-05-10', 'Nam', '0911111111'),
