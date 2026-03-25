@@ -75,6 +75,17 @@ exports.create = async (req, res) => {
     );
     if (!isValidPhone(sodienthoai)) errors.push("Số điện thoại phải có 9-11 chữ số");
     if (errors.length) return fail(res, "Dữ liệu không hợp lệ", 400, errors);
+    if (!isValidPhone(sodienthoai)) errors.push("Số điện thoại phải có 9-11 chữ số");
+    if (errors.length) return fail(res, "Dữ liệu không hợp lệ", 400, errors);
+
+    // 👇 thêm đoạn này ở đây
+    const [dupPhone] = await db.query(
+      "SELECT magv FROM teachers WHERE sodienthoai = ?",
+      [sodienthoai]
+    );
+    if (dupPhone.length) {
+      return fail(res, "Số điện thoại đã tồn tại", 409);
+    }
 
     const [acc] = await db.query("SELECT username FROM accounts WHERE username = ?", [username]);
     if (!acc.length) return fail(res, "Tài khoản không tồn tại", 404);
@@ -109,6 +120,7 @@ exports.update = async (req, res) => {
       const [dupUser] = await db.query("SELECT magv FROM teachers WHERE username = ? AND magv <> ?", [username, magv]);
       if (dupUser.length) return fail(res, "Tài khoản đã gán cho giảng viên khác", 409);
     }
+    
 
     if (sodienthoai && !isValidPhone(sodienthoai)) return fail(res, "Số điện thoại phải có 9-11 chữ số", 400);
 
@@ -123,7 +135,20 @@ exports.update = async (req, res) => {
        WHERE magv = ?`,
       [tengv || null, username || null, quequan || null, ngaysinh || null, gioitinh || null, sodienthoai || null, magv]
     );
+    if (sodienthoai) {
+      if (!isValidPhone(sodienthoai)) {
+        return fail(res, "Số điện thoại phải có 9-11 chữ số", 400);
+      }
 
+      const [dupPhone] = await db.query(
+        "SELECT magv FROM teachers WHERE sodienthoai = ? AND magv <> ?",
+        [sodienthoai, magv]
+      );
+
+      if (dupPhone.length) {
+        return fail(res, "Số điện thoại đã tồn tại", 409);
+      }
+    }
     const [rows] = await db.query("SELECT * FROM teachers WHERE magv = ?", [magv]);
     return ok(res, rows[0], "Cập nhật giảng viên thành công");
   } catch (error) {
