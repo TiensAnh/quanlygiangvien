@@ -63,11 +63,12 @@ exports.create = async (req, res) => {
   try {
     const { magv, tengv, username, quequan, ngaysinh, gioitinh, sodienthoai } = req.body;
     const errors = validateRequired(
-      { magv, tengv, username, ngaysinh, gioitinh, sodienthoai },
+      { magv, tengv, username, quequan, ngaysinh, gioitinh, sodienthoai },
       {
         magv: "Mã giảng viên",
         tengv: "Tên giảng viên",
         username: "Tài khoản",
+        quequan: "Quê quán",
         ngaysinh: "Ngày sinh",
         gioitinh: "Giới tính",
         sodienthoai: "Số điện thoại"
