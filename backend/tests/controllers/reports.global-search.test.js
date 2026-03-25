@@ -6,12 +6,12 @@ const db = require("../../src/config/db");
 const controller = require("../../src/controllers/reports.controller");
 const { createMockReq, createMockRes } = require("../helpers/http");
 
-describe("reports.controller", () => {
+describe("unit: reports.globalSearch", () => {
   beforeEach(() => {
     jest.clearAllMocks();
   });
 
-  test("globalSearch merges results from all entities", async () => {
+  test("returns merged search results from all entities", async () => {
     const req = createMockReq({ query: { keyword: "Node" } });
     const res = createMockRes();
 
